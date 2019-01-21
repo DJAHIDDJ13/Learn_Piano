@@ -7,4 +7,9 @@ router.get('/', function(req, res, next) {
 	});
 });
 
+
+router.get('/course', function(req, res, next) {
+	res.render('course_interface');
+});
+
 module.exports = router;
