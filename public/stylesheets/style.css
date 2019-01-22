@@ -1,8 +1,53 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+html, body {
+	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+	height: 100%;
+	margin: 0;
+	padding: 0;
 }
 
 a {
   color: #00B7FF;
+}
+
+.nav-bar {
+	position: fixed;
+	background-color: #333;
+	overflow: hidden;
+	top: 0;
+	left: 0;
+	width: 100%;
+}
+
+.nav-bar a {
+	float: left;
+	color: #EEE;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+	font-size: 17px;
+}
+
+.nav-bar a:hover {
+	background-color: #DDD;
+	color: black;
+}
+
+.nav-bar a.active {
+	background-color: #FFF;
+	color: white;
+}
+
+.content {
+	margin: 50px auto -50px;
+	min-height: 100%;
+}
+
+.footer, .push {
+	height: 60px;
+}
+
+.footer {
+	background-color: #333;
+	text-align: center;
+	padding: 1rem;
 }
