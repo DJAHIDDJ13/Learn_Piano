@@ -3,10 +3,8 @@ let notes = [];
 function midiMessageHandler(m) {
     const [command, key, velocity] = m.data;
     if (command === 144 && velocity != 0) {
-		//console.log(key);
 		notes.push(new noteOn(key, velocity));
     } else if (command == 144 && velocity == 0) {
-		console.log('OUT');
 		for(let i=0; i<notes.length; i++) {
 			if(notes[i].key == key) {
 				notes[i].noteOff();
@@ -14,11 +12,10 @@ function midiMessageHandler(m) {
 			}
 		}
 	}
-	//console.log(notes);
 }
 
 function setupMIDI() {
-	initAudioContext();
+	//~ initAudioContext();
 	navigator.requestMIDIAccess().then(
 		function (m) {
 			console.log("Initializing MIDI");

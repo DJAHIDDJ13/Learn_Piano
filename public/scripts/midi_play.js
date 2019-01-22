@@ -1,51 +1,72 @@
-let context = null;
-let playing_notes = [];
-let freq_lookup = [];
-
-function initAudioContext() {
-	for(let i=0; i<=112; i++) {
-		freq_lookup[i] = Math.pow(2, (i - 69) / 12) * 440;
-	}
-	context = new (window.AudioContext || window.webkitAudioContext)();
-}
+//let piano = Synth.createInstrument('piano');
+let note_names = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
 function noteOn(key, velocity) {
 	this.key = key;
-	this.stopped = false;
-	const freq = freq_lookup[key];
-	
-	var attack = 20,
-		decay = 1000,
-		gain = context.createGain(),
-		osc = context.createOscillator();
-
-	gain.connect(context.destination);
-	gain.gain.setValueAtTime(0, context.currentTime);
-	
-	gain.gain.linearRampToValueAtTime(1, context.currentTime + attack / 1000);
-	gain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + decay / 1000);
-	gain.gain.linearRampToValueAtTime(0, context.currentTime + 0.001);
-	osc.frequency.value = freq;
-	osc.connect(gain);
-	osc.start(0);
-	
-	
-	function stop_note() {
-		if(this.stopped) return;
-		osc.stop(0);
-		osc.disconnect(gain);
-		gain.disconnect(context.destination);
-		this.stopped = true;
-	}
-
-	setTimeout(function () {
-		stop_note();
-	}, decay+attack);
-
+	let note = Synth.generate('piano', note_names[key%12], key/12, 3);
+	let audio = new Audio(note);
+	audio.play();
 	this.noteOff = function() {
-		stop_note();
+		let fade = 50;
+		let i = fade;
+		let interv = setInterval(function() {
+			i--;
+			audio.volume = i * 1/fade;
+			if(i <= 0) {
+				clearInterval(interv);
+			}
+		}, 5);
 	}
 }
+
+//~ let context = null;
+//~ let playing_notes = [];
+//~ let freq_lookup = [];
+
+//~ function initAudioContext() {
+	//~ for(let i=0; i<=112; i++) {
+		//~ freq_lookup[i] = Math.pow(2, (i - 69) / 12) * 440;
+	//~ }
+	//~ context = new (window.AudioContext || window.webkitAudioContext)();
+//~ }
+
+//~ function noteOn(key, velocity) {
+	//~ this.key = key;
+	//~ this.stopped = false;
+	//~ const freq = freq_lookup[key];
+	
+	//~ var attack = 20,
+		//~ decay = 1000,
+		//~ gain = context.createGain(),
+		//~ osc = context.createOscillator();
+
+	//~ gain.connect(context.destination);
+	//~ gain.gain.setValueAtTime(0, context.currentTime);
+	
+	//~ gain.gain.linearRampToValueAtTime(1, context.currentTime + attack / 1000);
+	//~ gain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + decay / 1000);
+	//~ gain.gain.linearRampToValueAtTime(0, context.currentTime + 0.001);
+	//~ osc.frequency.value = freq;
+	//~ osc.connect(gain);
+	//~ osc.start(0);
+	
+	
+	//~ function stop_note() {
+		//~ if(this.stopped) return;
+		//~ osc.stop(0);
+		//~ osc.disconnect(gain);
+		//~ gain.disconnect(context.destination);
+		//~ this.stopped = true;
+	//~ }
+
+	//~ setTimeout(function () {
+		//~ stop_note();
+	//~ }, decay+attack);
+
+	//~ this.noteOff = function() {
+		//~ stop_note();
+	//~ }
+//~ }
 
 
 
