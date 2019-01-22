@@ -1,12 +1,20 @@
+let notes = [];
 
 function midiMessageHandler(m) {
-	//console.log(m.data);
     const [command, key, velocity] = m.data;
     if (command === 144 && velocity != 0) {
-		noteOn(key, velocity);
+		//console.log(key);
+		notes.push(new noteOn(key, velocity));
     } else if (command == 144 && velocity == 0) {
-		noteOff(key);
+		console.log('OUT');
+		for(let i=0; i<notes.length; i++) {
+			if(notes[i].key == key) {
+				notes[i].noteOff();
+				notes.splice(i, 1);
+			}
+		}
 	}
+	//console.log(notes);
 }
 
 function setupMIDI() {
@@ -25,6 +33,7 @@ function setupMIDI() {
 	);
 }
 
+// keyboard midi simulator
 window.onload = function () {
 	setupMIDI();
 	let notes_map = {
@@ -48,22 +57,31 @@ window.onload = function () {
 	};
 	let octave_num = 4;
 	let octave_max = 7;
-	let pressed;
+	let velocity = 1;
+	let pressed = [];
+	
 	document.addEventListener("keydown", function(e) {
-		if(pressed == e.keyCode) return;
+		if(pressed[e.keyCode]) return;
 		
-		console.log(e.keyCode);
-		if(e.keyCode == 87) {
+		if(e.keyCode == 87) { // octave down
 			octave_num = Math.max(octave_num - 1, 0);	
-		} else if(e.keyCode == 88) {
+		} else if(e.keyCode == 88) { // octave up
 			octave_num = Math.min(octave_num + 1, octave_max);
-		} else if(notes_map[e.keyCode] != undefined) {
-			noteOn(notes_map[e.keyCode] + 12 * (octave_num+1), 1);
+		} else if(e.keyCode == 67) { // velocity down
+			velocity = Math.max(velocity - 1, 1);
+		} else if(e.keyCode == 86) { // velocity up
+			velocity = Math.min(velocity + 1, 10);
+		} else if(notes_map[e.keyCode] != undefined) { 
+			midiMessageHandler({data:[144, notes_map[e.keyCode] + 12 * (octave_num+1), velocity]});
 		}
-		pressed = e.keyCode;
+		
+		pressed[e.keyCode] = true;
 	});
+	
 	document.addEventListener("keyup", function (e) {
-		pressed = 0;
+		if(notes_map[e.keyCode] != undefined)
+			midiMessageHandler({data:[144, notes_map[e.keyCode] + 12 * (octave_num + 1), 0]});
+		pressed[e.keyCode] = false;
 	});
 }
 
