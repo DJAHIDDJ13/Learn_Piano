@@ -1,9 +1,11 @@
 var express = require('express');
 var router = express.Router();
+var User = require('../models/user');
 
 router.get('/', function(req, res, next) {
 	res.render('login');
 });
+
 
 router.post('/conn', function(req, res, next) {
 	req.checkBody('email', 'Invalid email')
@@ -19,11 +21,18 @@ router.post('/conn', function(req, res, next) {
 			errors: errs
 		});
 	} else {
-		var userLogin = {
-			email: req.body.email,
-			password: req.body.password
-		};
-		res.redirect('/');
+		User.authenticate(req.body.email, req.body.password, function(err, user) {
+			if(err || !user) {
+				var err = new Error('Wrong email or password');
+				err.status = 401;
+				return next(err);
+			} else {
+				req.session.userId = user._id;
+				return res.redirect('/');
+			}
+		});
 	}
 });
+
+
 module.exports = router;

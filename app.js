@@ -4,6 +4,9 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var expressValidator = require('express-validator');
+var session = require('express-session');
+var mongoose = require('mongoose');
+var MongoStore = require('connect-mongo')(session);
 
 var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
@@ -20,6 +23,19 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(expressValidator());
+
+mongoose.connect('mongodb://127.0.0.1/piano_db', { useNewUrlParser: true } );
+mongoose.Promise = global.Promise;
+var db = mongoose.connection;
+
+app.use(session({
+	secret: 'work hard',
+	resave: true,
+	saveUninitialized: false,
+	store: new MongoStore({
+		mongooseConnection: db
+	})
+}));
 
 app.use('/', indexRouter);
 app.use('/login', loginRouter);
@@ -40,4 +56,10 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+db.on('error', console.error.bind(console, 'Mongodb connection error!'));
+db.once('open', function() {
+	console.log('connected to db');
+});
 module.exports = app;
+module.exports.db = db;
+

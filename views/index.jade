@@ -10,9 +10,11 @@ block content
 				nothing
 		- } else {
 			div.register
-				button#register-button SIGN UP
-				b OR
-				button#login-button SIGN IN
+				form(action="/signup")
+					button#register-button SIGN UP
+				OR
+				form(action="/login")
+					button#login-button SIGN IN
 		- }
 	div.courses-section
 		

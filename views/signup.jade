@@ -1,13 +1,15 @@
 extends layout
 
 block content
-	h1 Sign In
-	form(method='POST' action='/login/conn')
+	h1 Sign Up
+	form(method='POST' action='/signup')
+		div.form-group
+			input.form-control(type='text' id='username' placeholder='Username' name='username')
 		div.form-group
 			input.form-control(type='text' id='email' placeholder='Email' name='email')
 		div.form-group
 			input.form-control(type='password' id='password' placeholder='Password' name='password')
-		input.btn.btn-primary(type='submit', value='Login') 
+		input.btn.btn-primary(type='submit', value='Signup') 
 		- if(errors) {
 			ul
 			- for(error of errors) {
@@ -15,4 +17,4 @@ block content
 			- }
 		- }
 block scripts_styles
-	link(rel='stylesheet', href='/stylesheets/login_style.css')
+	link(rel='stylesheet', href='/stylesheets/signup_style.css')
