@@ -1,0 +1,69 @@
+html, body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: #EEE; }
+
+.sign-div {
+  background-color: #FFF;
+  width: 400px;
+  border-radius: 5px;
+  padding: 20px 30px;
+  margin: 50px auto;
+  text-align: center; }
+  .sign-div .input-div {
+    display: flex;
+    flex-direction: column;
+    width: 400px; }
+    .sign-div .input-div div {
+      position: relative; }
+    .sign-div .input-div .form-pass .pass-tooltip {
+      visibility: hidden;
+      background-color: black;
+      color: white;
+      border-radius: 6px;
+      padding: 5px 5px;
+      top: 5px;
+      left: -180px;
+      position: absolute;
+      font-size: 10px;
+      text-align: left;
+      z-index: 1; }
+    .sign-div .input-div .pass-tooltip:after {
+      width: 50px;
+      height: 50px;
+      border: 1px solid black; }
+    .sign-div .input-div .form-pass:hover .pass-tooltip {
+      visibility: visible; }
+    .sign-div .input-div input[type="text"], .sign-div .input-div input[type="password"] {
+      width: 80%;
+      background: transparent;
+      padding: 10px 0;
+      border: 0;
+      border-bottom: 1px solid rgba(20, 20, 20, 0.4);
+      margin: 10px 10%;
+      border-radius: 3px;
+      outline: none; }
+    .sign-div .input-div span {
+      font-size: 10px;
+      color: red;
+      position: absolute;
+      top: 14px;
+      right: 45px; }
+  .sign-div input[type="submit"] {
+    background: #333;
+    color: #EEE;
+    cursor: pointer;
+    border-radius: 3px;
+    height: 40px;
+    width: 80%;
+    border: 0;
+    margin: 10%; }
+  .sign-div a {
+    text-decoration: none; }
+    .sign-div a:hover {
+      text-decoration: underline; }
