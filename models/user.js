@@ -14,11 +14,24 @@ var UserSchema = new mongoose.Schema({
 			unique: true,
 			required: true,
 			trim: true
-		},
-		password: {
-			type: String,
-			required: true
 		}
+});
+
+const tokenSchema = new mongoose.Schema({
+	_userId: {
+		type: mongoose.Schema.Types.ObjectId,
+		required: true,
+		ref: 'User'
+	},
+	token: {
+		type: String,
+		required: true
+	},
+	createdAt: {
+		type: Date,
+		required: true,
+		default: Date
+	}
 });
 
 UserSchema.statics.authenticate = function(email, password, callback) {

@@ -7,25 +7,27 @@ router.get('/', function(req, res, next) {
 });
 
 
-router.post('/conn', function(req, res, next) {
+router.post('/', function(req, res, next) {
 	req.checkBody('email', 'Invalid email')
 		.matches(/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/, "i");
 	req.checkBody('password', 'Password must be a combination of an upper and a lower case letter, a number, and a special character')
 		.matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!\?&@#%\$\+\-\*/])(?=.{8,})/, "i");
 
 	var errs = req.validationErrors();
+	console.log(errs);
 	if(errs) {
 		res.render('login', {
 			email: req.body.email,
 			password: req.body.password,
 			errors: errs
 		});
+		return next();
 	} else {
 		User.authenticate(req.body.email, req.body.password, function(err, user) {
 			if(err || !user) {
 				var err = new Error('Wrong email or password');
 				err.status = 401;
-				return next(err);
+				return next();
 			} else {
 				req.session.userId = user._id;
 				return res.redirect('/');

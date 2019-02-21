@@ -1,20 +1,67 @@
 extends layout
 
+
+
 block content
-	h1 Sign Up
-	form(method='POST' action='/signup')
-		div.form-group
-			input.form-control(type='text' id='username' placeholder='Username' name='username')
-		div.form-group
-			input.form-control(type='text' id='email' placeholder='Email' name='email')
-		div.form-group
-			input.form-control(type='password' id='password' placeholder='Password' name='password')
-		input.btn.btn-primary(type='submit', value='Signup') 
-		- if(errors) {
-			ul
-			- for(error of errors) {
-				li=error.msg
-			- }
-		- }
+	- let errs = {};
+	- for(let err of errors) {
+	-	errs[err.param] = (errs[err.param] === undefined)? 1: errs[err.param] + 1;
+	- }
+
+	div.sign-div
+		h1 Sign Up
+		form(method='POST' action='/user/signup')
+			div.input-div
+				div.form-username
+					- if(errs['username']) {
+						span='Field cannot be empty'
+						input.form-control(type='text' id='username' placeholder='Username' name='username' style='border-color:red; background-color:#ffeeee;')
+					- } else
+						input.form-control(type='text' id='username' placeholder='Username' name='username')
+
+				div.form-email
+					- if(errs['email']) {
+						span='Invalid email'
+						input.form-control(type='text' id='email' placeholder='Email' name='email' style='border-color:red; background-color:#ffeeee;')
+					- } else
+						input.form-control(type='text' id='email' placeholder='Email' name='email')
+
+				div.form-pass
+					- if(errs['password']) {
+						div.pass-tooltip
+							p='Your password must contain:'
+							ul
+								li.
+									lower and and upper case character
+								li.
+									a number
+								li.
+									a special character
+
+						span='Password not strong enough'
+						input.form-control(type='password' id='password' placeholder='Password' name='password' style='border-color:red; background-color:#ffeeee;')
+
+					- } else {
+						div.pass-tooltip
+							p='Your password must contain:'
+							ul
+								li.
+									lower and and upper case character
+								li.
+									a number
+								li.
+									a special character
+						input.form-control(type='password' id='password' placeholder='Password' name='password')
+					- }
+				div.form-confirm
+					- if(errs['password2']) {
+						span='Passwords must match'
+						input.form-control(type='password' id='password2' placeholder='Confirm your password' name='password2' style='border-color:red; background-color:#ffeeee;')
+					- } else
+						input.form-control(type='password' id='password2' placeholder='Confirm your password' name='password2')
+
+			input(type='submit', value='Signup')
+		a(href='/user/login')='Already have an account?'
+
 block scripts_styles
-	link(rel='stylesheet', href='/stylesheets/signup_style.css')
+	link(rel='stylesheet', href='/stylesheets/userStyle.css')
