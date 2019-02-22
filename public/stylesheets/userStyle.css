@@ -21,23 +21,40 @@ html, body {
     width: 400px; }
     .sign-div .input-div div {
       position: relative; }
-    .sign-div .input-div .form-pass .pass-tooltip {
+    .sign-div .input-div .info-button {
+      position: relative; }
+      .sign-div .input-div .info-button span {
+        font-size: 15px;
+        background: #5bc0de;
+        border-radius: 40px;
+        width: 18px;
+        height: 18px;
+        color: white;
+        left: 370px;
+        top: 24px; }
+    .sign-div .input-div .info-button .pass-tooltip {
       visibility: hidden;
       background-color: black;
       color: white;
       border-radius: 6px;
-      padding: 5px 5px;
+      padding: 10px 10px;
       top: 5px;
-      left: -180px;
+      left: 370px;
+      width: 210px;
       position: absolute;
       font-size: 10px;
       text-align: left;
       z-index: 1; }
     .sign-div .input-div .pass-tooltip:after {
-      width: 50px;
-      height: 50px;
-      border: 1px solid black; }
-    .sign-div .input-div .form-pass:hover .pass-tooltip {
+      position: absolute;
+      background: black;
+      width: 15px;
+      height: 15px;
+      content: '';
+      top: 28%;
+      left: -3%;
+      transform: rotate(45deg); }
+    .sign-div .input-div .info-button:hover .pass-tooltip {
       visibility: visible; }
     .sign-div .input-div input[type="text"], .sign-div .input-div input[type="password"] {
       width: 80%;

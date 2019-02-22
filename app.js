@@ -42,6 +42,7 @@ app.use(session({
 	})
 }));
 
+// routes 
 app.use('/', indexRouter);
 app.use('/user', userRouter);
 app.use('/course', courseRouter);
@@ -62,6 +63,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+// db error handler
 db.on('error', console.error.bind(console, 'Mongodb connection error!'));
 db.once('open', function() {
 	console.log('Connected to database');

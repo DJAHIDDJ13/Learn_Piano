@@ -1,0 +1,37 @@
+extends layout
+
+
+
+block content
+
+	div.sign-div
+		- if(!token) {
+		h1 Please check your email
+		p. to resend please enter your email
+		form(method='POST' action='/user/confirmation')
+			div.form-email
+				- if(email) {
+					span='Please enter your email'
+					input.form-control(type='text' id='email' placeholder='Email' name='email' style='border-color:red; background-color:#ffeeee;')
+				- } else {
+					input.form-control(type='text' id='email' placeholder='Email' name='email')
+				- }
+			input(type='submit', value='Resend')
+		- } else {
+			
+		h1 Please confirm your email
+		form(method='POST' action='/user/confirmation')
+			div.input-div
+				div.form-email
+					- if(email) {
+						span='Please enter your email'
+						input.form-control(type='text' id='email' placeholder='Email' name='email' style='border-color:red; background-color:#ffeeee;')
+					- } else {
+						input.form-control(type='text' id='email' placeholder='Email' name='email')
+					- }
+				div.form-token
+					input.form-control(type='hidden' id='token' name='token' value=token)
+			input(type='submit', value='Confirm') 
+		- }
+block scripts_styles
+	link(rel='stylesheet', href='/stylesheets/userStyle.css')

@@ -1,7 +1,7 @@
 extends layout
 
 block content
-	- let errs = {};
+	- let errs = {}; // used for handling errors
 	- for(let err of errors) {
 	-	errs[err.param] = true;
 	- }
@@ -13,39 +13,30 @@ block content
 			div.input-div
 				div.form-email
 					- if(errs['email']) {
-						span='Email or username'
+						span='Please enter your email'
 						input.form-control(type='text' id='email' placeholder='Email' name='email' style='border-color:red; background-color:#ffeeee;')
-					- } else
+					- } else if(errs['auth']) {
+						span='Wrong email or password'
+						input.form-control(type='text' id='email' placeholder='Email' name='email' style='border-color:red; background-color:#ffeeee;')
+					- } else {
 						input.form-control(type='text' id='email' placeholder='Email' name='email')
+					- }
 				div.form-pass
 					- if(errs['password']) {
-						div.pass-tooltip
-							p='Your password must contain:'
-							ul
-								li.
-									lower and and upper case character
-								li.
-									a number
-								li.
-									a special character
 						span='Invalid password'
 						input.form-control(type='password' id='password' placeholder='Password' name='password'  style='border-color:red; background-color:#ffeeee;')
+					- } else if(errs['auth']) {
+						input.form-control(type='password' id='password' placeholder='Password' name='password'  style='border-color:red; background-color:#ffeeee;')
 					- } else {
-						div.pass-tooltip
-							p='Your password must contain:'
-							ul
-								li.
-									lower and and upper case character
-								li.
-									a number
-								li.
-									a special character
 						input.form-control(type='password' id='password' placeholder='Password' name='password')
 					- }
 			input(type='submit', value='Login') 
 		a(href='/user/forgot')='Forgot your password?'
 		br
 		a(href='/user/signup')='Don\'t have an account?'
-
+		br
+		- if(errs['unverified']) {
+			a(style='color:red;' href='/user/confirmation')='Verify account to access! verify here'
+		- }
 block scripts_styles
 	link(rel='stylesheet', href='/stylesheets/userStyle.css')

@@ -3,11 +3,11 @@ extends layout
 
 
 block content
-	- let errs = {};
+	- let errs = {}; // used for handling errors
 	- for(let err of errors) {
 	-	errs[err.param] = (errs[err.param] === undefined)? 1: errs[err.param] + 1;
 	- }
-
+	
 	div.sign-div
 		h1 Sign Up
 		form(method='POST' action='/user/signup')
@@ -28,29 +28,33 @@ block content
 
 				div.form-pass
 					- if(errs['password']) {
-						div.pass-tooltip
-							p='Your password must contain:'
-							ul
-								li.
-									lower and and upper case character
-								li.
-									a number
-								li.
-									a special character
+						div.info-button
+							span='i'
+							div.pass-tooltip
+								p='Your password must contain:'
+								ul
+									li.
+										a lower and and upper case character
+									li.
+										a number
+									li.
+										a special character
 
 						span='Password not strong enough'
 						input.form-control(type='password' id='password' placeholder='Password' name='password' style='border-color:red; background-color:#ffeeee;')
 
 					- } else {
-						div.pass-tooltip
-							p='Your password must contain:'
-							ul
-								li.
-									lower and and upper case character
-								li.
-									a number
-								li.
-									a special character
+						div.info-button
+							span='i'
+							div.pass-tooltip
+								p='Your password must contain:'
+								ul
+									li.
+										a lower and and upper case character
+									li.
+										a number
+									li.
+										a special character
 						input.form-control(type='password' id='password' placeholder='Password' name='password')
 					- }
 				div.form-confirm
@@ -62,6 +66,9 @@ block content
 
 			input(type='submit', value='Signup')
 		a(href='/user/login')='Already have an account?'
+		- if(errs['duplicate'])
+			p(style='color:red;').
+				A user with that email already exists
 
 block scripts_styles
 	link(rel='stylesheet', href='/stylesheets/userStyle.css')

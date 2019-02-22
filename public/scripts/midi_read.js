@@ -2,9 +2,10 @@ let notes = [];
 
 function midiMessageHandler(m) {
     const [command, key, velocity] = m.data;
-    if (command === 144 && velocity != 0) {
+    console.log(velocity);
+    if ((command === 155 || command === 144)&& velocity != 0) {
 		notes.push(new noteOn(key, velocity));
-    } else if (command == 144 && velocity == 0) {
+    } else if (command == 155 && velocity == 0) {
 		for(let i=0; i<notes.length; i++) {
 			if(notes[i].key == key) {
 				notes[i].noteOff();
