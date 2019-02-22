@@ -55,7 +55,7 @@ window.onload = function () {
 	};
 	let octave_num = 4;
 	let octave_max = 7;
-	let velocity = 1;
+	let velocity = 50;
 	let pressed = [];
 	
 	document.addEventListener("keydown", function(e) {
@@ -66,13 +66,13 @@ window.onload = function () {
 		} else if(e.keyCode == 88) { // octave up
 			octave_num = Math.min(octave_num + 1, octave_max);
 		} else if(e.keyCode == 67) { // velocity down
-			velocity = Math.max(velocity - 1, 1);
+			velocity = Math.max(velocity - 10, 1);
 		} else if(e.keyCode == 86) { // velocity up
-			velocity = Math.min(velocity + 1, 10);
+			velocity = Math.min(velocity + 10, 128);
 		} else if(notes_map[e.keyCode] != undefined) { 
 			midiMessageHandler({data:[144, notes_map[e.keyCode] + 12 * (octave_num+1), velocity]});
 		}
-		
+		console.log(velocity);
 		pressed[e.keyCode] = true;
 	});
 	

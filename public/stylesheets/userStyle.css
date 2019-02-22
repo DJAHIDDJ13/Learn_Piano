@@ -5,8 +5,11 @@ html, body {
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: auto;
+  overflow: hidden;
   background-color: #EEE; }
+
+body {
+  overflow: auto; }
 
 .sign-div {
   background-color: #FFF;
