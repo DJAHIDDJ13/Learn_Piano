@@ -18,7 +18,8 @@ var CourseSchema = new mongoose.Schema({
 			required: true
 		},
 		difficulty: String,
-		lectures: Array
+		lectures: Array,
+		exercices: Array
 });
 
 var Course = mongoose.model('Course', CourseSchema);

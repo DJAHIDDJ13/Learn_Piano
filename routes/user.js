@@ -121,8 +121,8 @@ router.post('/signup', function(req, res, next) {
 						port: 587,
 						secure: false,
 						auth: {
-							user: 'lionel.gutkowski69@ethereal.email',
-							pass: 'ywkcZmCqJdX88h9zPr'
+							user: 'francesca11@ethereal.email',
+							pass: '5jf9CesSJNsSWB3Gd6'
 						}
 					});
 					var mailOptions = {

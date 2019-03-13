@@ -3,7 +3,7 @@ let note_names = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B
 
 function noteOn(key, velocity) {
 	this.key = key;
-	let note = Synth.generate('piano', note_names[key%12], key/12, velocity/50);
+	let note = Synth.generate('piano', note_names[key%12], key/12, 3);
 	let audio = new Audio(note);
 	audio.play();
 	

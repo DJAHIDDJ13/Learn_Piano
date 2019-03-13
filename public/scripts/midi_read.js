@@ -1,8 +1,15 @@
 let notes = [];
+var piano_event;
 
-function midiMessageHandler(m) {
-    const [command, key, velocity] = m.data;
-    console.log(velocity);
+window.addEventListener('piano', // handling piano events (midi or mouse or keyboard)
+	function(e) {
+		console.log(e.detail.data);
+		handlePianoEvent(e.detail.data);
+	}, false
+);
+function handlePianoEvent(m) {
+    const [command, key, velocity] = m;
+
     if ((command === 155 || command === 144)&& velocity != 0) {
 		notes.push(new noteOn(key, velocity));
     } else if (command == 155 && velocity == 0) {
@@ -14,9 +21,12 @@ function midiMessageHandler(m) {
 		}
 	}
 }
+function midiMessageHandler(m) {
+	window.dispatchEvent(new CustomEvent('piano', {detail:{data: m.data, source: "midi"}}));
+	//~ handlePianoEvent(m);
+}
 
 function setupMIDI() {
-	//~ initAudioContext();
 	navigator.requestMIDIAccess().then(
 		function (m) {
 			console.log("Initializing MIDI");
@@ -24,6 +34,7 @@ function setupMIDI() {
 				console.log(entry.name + " detected");
 				entry.onmidimessage = midiMessageHandler;
 			});
+			Synth.setSampleRate(44100);
 		},
 		function (err) {
 			console.log('An error occured while trying to init midi: ' + err);
@@ -69,16 +80,21 @@ window.onload = function () {
 			velocity = Math.max(velocity - 10, 1);
 		} else if(e.keyCode == 86) { // velocity up
 			velocity = Math.min(velocity + 10, 128);
-		} else if(notes_map[e.keyCode] != undefined) { 
-			midiMessageHandler({data:[144, notes_map[e.keyCode] + 12 * (octave_num+1), velocity]});
+		} else if(notes_map[e.keyCode] != undefined) {
+			var d = [144, notes_map[e.keyCode] + 12 * (octave_num+1), velocity];
+			window.dispatchEvent(new CustomEvent('piano', {detail:{data: d, source: "keyboard"}}));
+			//~ handlePianoEvent({data:d});
 		}
-		console.log(velocity);
+
 		pressed[e.keyCode] = true;
 	});
 	
 	document.addEventListener("keyup", function (e) {
-		if(notes_map[e.keyCode] != undefined)
-			midiMessageHandler({data:[144, notes_map[e.keyCode] + 12 * (octave_num + 1), 0]});
+		if(notes_map[e.keyCode] != undefined) {
+			var d = [144, notes_map[e.keyCode] + 12 * (octave_num + 1), 0];
+			window.dispatchEvent(new CustomEvent('piano', {detail:{data: d, source: "keyboard"}}));
+			//~ handlePianoEvent({data:d});
+		}
 		pressed[e.keyCode] = false;
 	});
 }
