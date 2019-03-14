@@ -6,14 +6,17 @@ block content
 	div.info-bar
 		h2.
 			Welcome
+		a(href='/course/exercice' style='float: right;').course-button.
+			Practice
 		p.
 			Here are the courses:
+			
 	div.course-list
 		ol.courses
 			div.course-column1
 				- for(let i=0; i<course_div; i++) {
 					li.course-element
-						h2=courses[i].name
+						h2=courses[i].lectures[0].name
 						- if(courses[i].info.length < max_len)
 							p(id="course-info-less-no"+i style='')=courses[i].info
 						-else
@@ -23,13 +26,13 @@ block content
 							a(id=i href='#' onClick="toggleReadMore(this.id);").button-showmore
 								| Show more
 								i(class='fa fa-angle-down').
-							a(href='/course/'+i).course-button.
+							a(href='/course/lecture/'+(i+1)+'/0').course-button.
 								Start course
 				- }
 			div.course-column2
 				- for(let i=course_div; i<courses.length; i++) {
 					li.course-element
-						h2=courses[i].name
+						h2=courses[i].lectures[0].name
 						- if(courses[i].info.length < max_len)
 							p(id="course-info-less-no"+i style='')=courses[i].info
 						-else
@@ -39,7 +42,7 @@ block content
 							a(id=i href='#' onClick="toggleReadMore(this.id);").button-showmore
 								| Show more
 								i(class='fa fa-angle-down').
-							a(href='/course/'+i).course-button.
+							a(href='/course/lecture/'+(i+1)+'/0').course-button.
 								Start course
 				- }
 block scripts_styles

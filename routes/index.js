@@ -6,7 +6,7 @@ router.get('/', function(req, res, next) {
 	
 	res.render('index', {
 		title: "Express",
-		logged: session.email && session.password
+		logged: session.email != ''
 	});
 });
 

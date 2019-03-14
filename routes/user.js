@@ -48,6 +48,7 @@ router.post('/login', function(req, res, next) {
 			} else {
 				// create session and redirect to home
 				req.session.userId = user._id;
+				req.session.email = user.email;
 				return res.redirect('/');
 			}
 		});
@@ -93,7 +94,8 @@ router.post('/signup', function(req, res, next) {
 		var userData = {
 			email: req.body.email,
 			username: req.body.username,
-			password: req.body.password
+			password: req.body.password,
+			isVerified: true
 		};
 		
 		User.create(userData, function(err, user) {

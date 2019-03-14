@@ -37,22 +37,22 @@
 						font-size: 15px;
 					}
 				}
-				.course-button {
-					text-decoration: none;
-					border-radius: 5px;
-					background-color: #ffc844;
-					border-color: #ffc844;			
-					color: #3d4251;
-					padding: 10px;
-					&:hover, &:focus, &:active {
-						background-color: #fbe28d;
-						border-color: #fbe28d;
-					}
-				}
 				padding: 20px;
 				margin: 0;
 				border-top: 1px solid black;
 			}
 		}
+	}
+}
+.course-button {
+	text-decoration: none;
+	border-radius: 5px;
+	background-color: #ffc844;
+	border-color: #ffc844;			
+	color: #3d4251;
+	padding: 10px;
+	&:hover, &:focus, &:active {
+		background-color: #fbe28d;
+		border-color: #fbe28d;
 	}
 }

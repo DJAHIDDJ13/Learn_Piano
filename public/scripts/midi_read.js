@@ -3,7 +3,6 @@ var piano_event;
 
 window.addEventListener('piano', // handling piano events (midi or mouse or keyboard)
 	function(e) {
-		console.log(e.detail.data);
 		handlePianoEvent(e.detail.data);
 	}, false
 );
@@ -23,7 +22,6 @@ function handlePianoEvent(m) {
 }
 function midiMessageHandler(m) {
 	window.dispatchEvent(new CustomEvent('piano', {detail:{data: m.data, source: "midi"}}));
-	//~ handlePianoEvent(m);
 }
 
 function setupMIDI() {

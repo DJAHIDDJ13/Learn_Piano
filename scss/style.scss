@@ -1,7 +1,7 @@
 @import 'reset';
 
 $bg-col: #AAA;
-$main-col: #555;
+$main-col: #999;
 $main-font-col: white;
 $second-font-col: black;
 
@@ -45,6 +45,7 @@ $second-font-col: black;
 }
 
 .register button {
+	margin: 0 30px;
 	display: inline;
 	color: $main-font-col;
 	background: $bg-col;
@@ -70,6 +71,7 @@ $second-font-col: black;
 }
 
 #login-button {
+	margin: 10px 30px;
 	display: inline;
 }
 

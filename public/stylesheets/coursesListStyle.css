@@ -33,13 +33,14 @@
         .course-list .courses .course-element .course-control .button-showmore i {
           margin-left: 5px;
           font-size: 15px; }
-      .course-list .courses .course-element .course-control .course-button {
-        text-decoration: none;
-        border-radius: 5px;
-        background-color: #ffc844;
-        border-color: #ffc844;
-        color: #3d4251;
-        padding: 10px; }
-        .course-list .courses .course-element .course-control .course-button:hover, .course-list .courses .course-element .course-control .course-button:focus, .course-list .courses .course-element .course-control .course-button:active {
-          background-color: #fbe28d;
-          border-color: #fbe28d; }
+
+.course-button {
+  text-decoration: none;
+  border-radius: 5px;
+  background-color: #ffc844;
+  border-color: #ffc844;
+  color: #3d4251;
+  padding: 10px; }
+  .course-button:hover, .course-button:focus, .course-button:active {
+    background-color: #fbe28d;
+    border-color: #fbe28d; }

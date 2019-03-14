@@ -26,10 +26,10 @@ body {
     text-decoration: none;
     font-size: 17px; }
     .nav-bar a:hover {
-      background-color: #555;
+      background-color: #999;
       color: black; }
     .nav-bar a .active {
-      background-color: #555;
+      background-color: #999;
       color: white; }
 
 /* Main Content */
@@ -40,11 +40,12 @@ body {
 
 .top-section {
   width: 100%;
-  background-color: #555;
+  background-color: #999;
   padding: 20px;
   margin: 0; }
 
 .register button {
+  margin: 0 30px;
   display: inline;
   color: white;
   background: #AAA;
@@ -66,6 +67,7 @@ body {
   color: #ffffff; }
 
 #login-button {
+  margin: 10px 30px;
   display: inline; }
 
 /* footer */
