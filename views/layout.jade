@@ -8,7 +8,10 @@ html
 	body
 		div.nav-bar#nav-top
 			a(href='/') Home
-
+			- if(logged) {
+			form(method='POST', action='/user/logout').logout
+				input(type='submit', value='Log out')
+			- }
 		div.container
 			block content
 		

@@ -23,7 +23,8 @@ router.get('/', function(req, res, next) {
 			}
 
 			res.render('courses', {
-				courses: docs
+				courses: docs,
+				logged: true
 			});
 		});
 	} else {
@@ -53,7 +54,8 @@ router.get('/lecture/:id/:lecid', function(req, res, next) {
 
 			res.render('course_interface', {
 				Lecture: LectureCont,
-				CourseInfo: CourseInfo
+				CourseInfo: CourseInfo,
+				logged: true
 			});
 		});
 	} else {
@@ -67,7 +69,7 @@ router.get('/exercice', function(req, res, next) {
 	/* find course from id and put it in */
 	
 	if(session.userId) { // session check
-		res.render('exercice_interface');
+		res.render('exercice_interface', {logged: true});
 	} else {
 		res.redirect('/user/login');
 	}
@@ -107,7 +109,7 @@ router.get('/practice', function(req, res, next) {
 	var session = req.session;
 	//~ console.log(session);
 	if(session.userId) {
-		res.render('course_interface');
+		res.render('course_interface', {logged: true});
 	} else {
 		res.redirect('/user/login');
 	}

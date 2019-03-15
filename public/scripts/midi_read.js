@@ -15,7 +15,6 @@ window.addEventListener('piano', // handling piano events (midi or mouse or keyb
 /* play the sound for the piano event */
 function handlePianoEvent(m) {
     const [command, key, velocity] = m;
-	console.log(m);
     if (((command === 155 || command === 149) || command === 144) && velocity != 0) {
 		notes.push(new noteOn(key, velocity));
     } else if (command == 155 && velocity == 0) {

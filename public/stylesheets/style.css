@@ -66,6 +66,24 @@ body {
     border-color: #f6b93b;
     transition: all 0.4s ease 0s; }
 
+.logout input {
+  float: right;
+  margin: 3px 30px;
+  display: inline;
+  color: white;
+  background: #AAA;
+  padding: 7px 15px;
+  border: 4px solid white;
+  border-radius: 6px;
+  display: inline-block; }
+  .logout input:hover {
+    display: inline;
+    color: white;
+    text-transform: upppercase;
+    background: #f6b93b;
+    border-color: #f6b93b;
+    transition: all 0.4s ease 0s; }
+
 #register-button {
   display: inline;
   background: #494949;

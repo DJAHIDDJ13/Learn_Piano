@@ -12,7 +12,7 @@ function noteOn(key, velocity) { // plays a single note with the audiosynth libr
 	// so I use this to stop the note, which is fading the volume of the Audio
 	// object which is wav file 
 	this.noteOff = function() { 
-		let fade = 50;
+		let fade = 50; // in ms
 		let i = fade;
 		let interv = setInterval(function() { // i use setInterval to fade the note (to avoid sound clicks)
 			i--;
