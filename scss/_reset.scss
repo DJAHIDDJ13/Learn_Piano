@@ -1,3 +1,9 @@
+/**
+ * to reset the default browser css
+ * this file is a partial, meaning it will be ignored by the watch 
+ * script, and thus can only be imported from other .scss files
+ */
+
 html, body {
 	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 	margin: 0;

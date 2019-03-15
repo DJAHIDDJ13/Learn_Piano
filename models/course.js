@@ -1,3 +1,7 @@
+/**
+ * The course mongo schema (the course text and image URLs are linked
+ * in this model)
+ */
 var mongoose = require('mongoose');
 
 var CourseSchema = new mongoose.Schema({
