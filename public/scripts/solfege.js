@@ -58,6 +58,8 @@ class solfege {
 				notes: this.notes
 			}
 		};
+		this.note_names = ['DO', 'DO#', 'RE', 'RE#', 'MI', 'FA', 'FA#', 'SOL', 'SOL#', 'LA', 'LA#', 'SI'];
+
 	}
 
 	/* load the exercice to the this.note s and other info */
@@ -69,14 +71,16 @@ class solfege {
 		this.songLen = exer.len;
 	}
 	/* calculate and update the score and the script and log */
+	/* needs to be redone */
 	updateScore(key, start, duration) {
-		var nextNote = (start/30 << 0) + 1;
+		// predict the note meant to be played
+		var nextNote = (start/30 << 0);
 		var actualNote;
-		while(!(actualNote = this.notes[nextNote++]) && nextNote < this.songLen);
+		while(!(actualNote = this.notes[nextNote++]) && nextNote < nextNote + 3);
+		
 		if(actualNote == undefined || this.seen == nextNote) {
 			this.color = color(255,0,0);
 			this.script = "Missed!";
-			//~ this.score = Math.max(0, this.score - 0.05);
 			return;
 		}
 		this.seen = nextNote;
@@ -95,10 +99,10 @@ class solfege {
 		var noteDifference = Math.abs(actualKey - key);
 		var durationDifference = Math.round(Math.abs(actualDuration - duration));
 		var startDifference = Math.abs((actualNote.pos)*30 - start);
-		//~ this.script = '' + noteDifference + '/' + durationDifference + '/' + startDifference;
+
 		var localScore = 0;
 		if(!noteDifference) {
-			localScore += (durationDifference)? 1/(1+durationDifference): 1;
+			localScore += (durationDifference)? 1/(durationDifference+1): 1;
 			localScore += (startDifference)? 1/(startDifference+1): 1;
 			this.score ++;
 			if(localScore > 1) {
@@ -114,7 +118,6 @@ class solfege {
 		} else {
 			this.color = color(255,0,0);
 			this.script = "Missed!";
-			//~ this.score = Math.max(0, this.score - 0.05);
 		}
 		sol.logKeys({
 			time: Math.abs(sol.progress),
@@ -128,7 +131,6 @@ class solfege {
 		if(!isRelease) {
 			this.hints[key] = {
 				time: this.progress,
-				color: "green",
 				val: key
 			}
 		} else {
@@ -199,6 +201,7 @@ class solfege {
 		push();
 		textAlign(CENTER, CENTER);
 		textSize(40);
+
 		text(this.script, solfegeCanvas.width/2, 200);
 		pop();
 
@@ -285,15 +288,16 @@ class solfege {
 						pop();
 					}
 				}
-				/* to draw the out ledgers*/
-				//~ if((noteOff > 7 || noteOff < -1) && Math.abs(noteOff)%2 == 1) {
-					//~ strokeWeight(2);
-					//~ line(0, spacing/2, outLedgerWidth, spacing/2);
-				//~ }
+				//~ /* to draw the out ledgers*/
+				if(((noteOff > 7 && noteOff < 10) || noteOff < -1 || (noteOff > 19) ) && Math.abs(noteOff)%2 == 1) {
+					strokeWeight(2);
+					line(0, spacing/2, outLedgerWidth, spacing/2);
+				}
 				pop();
 			}
 		}
 		/* draw hints */
+		var wroteNote = 0;
 		for(var i=0; i<120; i++) {
 			stroke(this.color);
 			fill(this.color);
@@ -302,7 +306,15 @@ class solfege {
 				noteOff += this.blackLUT[this.hints[i].val];
 				var isSharp = this.blackLUT[this.hints[i].val] != this.blackLUT[this.hints[i].val-1];
 				var wtext = ((isSharp)? this.symbolTable.sharp: '');
-
+				if(!wroteNote && this.hints[i]) {
+					wroteNote = 1;
+					push();
+					textSize(20);
+					fill(0);
+					stroke(0);
+					text(this.note_names[this.hints[i].val % 12], 20-this.progress, 150);
+					pop();
+				}
 				text(this.symbolTable.whole, 93-this.progress,
 				paddingY+(spacing/2)*noteOff);
 				if(wtext) {

@@ -15,8 +15,8 @@ window.addEventListener('piano', // handling piano events (midi or mouse or keyb
 /* play the sound for the piano event */
 function handlePianoEvent(m) {
     const [command, key, velocity] = m;
-
-    if ((command === 155 || command === 144)&& velocity != 0) {
+	console.log(m);
+    if (((command === 155 || command === 149) || command === 144) && velocity != 0) {
 		notes.push(new noteOn(key, velocity));
     } else if (command == 155 && velocity == 0) {
 		for(let i=0; i<notes.length; i++) {
@@ -42,7 +42,7 @@ function setupMIDI() {
 				console.log(entry.name + " detected");
 				entry.onmidimessage = midiMessageHandler;
 			});
-			Synth.setSampleRate(44100); // set the quality of the synthesized audio
+			Synth.setSampleRate(4000); // set the quality of the synthesized audio
 		},
 		function (err) {
 			console.log('An error occured while trying to init midi: ' + err);
