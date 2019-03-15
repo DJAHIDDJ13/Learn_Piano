@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
 	
 	res.render('index', { // this function searches the views directory for a jade view and renders it
 		title: "Learn Piano",
-		logged: session.email != '' // these are parameters that can be sent to the jade page
+		logged: session.userId // these are parameters that can be sent to the jade page
 	});
 });
 

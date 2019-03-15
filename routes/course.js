@@ -105,7 +105,7 @@ router.get('/exercice/getExercice', function(req, res, next) {
 /* handles the practice page */
 router.get('/practice', function(req, res, next) {
 	var session = req.session;
-	console.log(session);
+	//~ console.log(session);
 	if(session.userId) {
 		res.render('course_interface');
 	} else {
