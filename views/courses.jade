@@ -1,0 +1,72 @@
+extends layout
+
+block content
+	- let max_len = 50;
+	- let course_div = Math.round(courses.length / 2);
+	div.info-bar
+		h2.
+			Welcome
+		a(href='/course/exercice' style='float: right;').course-button.
+			Practice
+		p.
+			Here are the courses:
+			
+	div.course-list
+		ol.courses
+			div.course-column1
+				- for(let i=0; i<course_div; i++) {
+					li.course-element
+						h2=courses[i].lectures[0].name
+						- if(courses[i].info.length < max_len)
+							p(id="course-info-less-no"+i style='')=courses[i].info
+						-else
+							p(id="course-info-less-no"+i style='')=courses[i].info.substring(0, max_len) + "..."
+						p(id="course-info-more-no"+i style='visibility:hidden; position:absolute;')=courses[i].info
+						div.course-control
+							a(id=i href='#' onClick="toggleReadMore(this.id);").button-showmore
+								| Show more
+								i(class='fa fa-angle-down').
+							a(href='/course/lecture/'+(i+1)+'/0').course-button.
+								Start course
+				- }
+			div.course-column2
+				- for(let i=course_div; i<courses.length; i++) {
+					li.course-element
+						h2=courses[i].lectures[0].name
+						- if(courses[i].info.length < max_len)
+							p(id="course-info-less-no"+i style='')=courses[i].info
+						-else
+							p(id="course-info-less-no"+i style='')=courses[i].info.substring(0, max_len) + "..."
+						p(id="course-info-more-no"+i style='visibility:hidden; position:absolute;')=courses[i].info
+						div.course-control
+							a(id=i href='#' onClick="toggleReadMore(this.id);").button-showmore
+								| Show more
+								i(class='fa fa-angle-down').
+							a(href='/course/lecture/'+(i+1)+'/0').course-button.
+								Start course
+				- }
+block scripts_styles
+	link(rel='stylesheet', href='/stylesheets/coursesListStyle.css')
+	script.
+		let courses = [];
+		function toggleReadMore(idx) {
+			let course_les = document.getElementById("course-info-less-no" + idx);
+			let course_mor = document.getElementById("course-info-more-no" + idx);
+			let show_more = document.getElementById(idx);
+			const icn_up= "<i class='fa fa-angle-up'/>";
+			const icn_down = "<i class='fa fa-angle-down'/>";
+
+			if(course_les.style.visibility === 'hidden') {
+				show_more.innerHTML = "SHOW MORE" + icn_down;
+				course_les.style.visibility = 'visible';
+				course_les.style.position = 'static';
+				course_mor.style.visibility = 'hidden';
+				course_mor.style.position = 'absolute';
+			} else {
+				show_more.innerHTML = "SHOW LESS" + icn_up;
+				course_les.style.visibility = 'hidden';
+				course_les.style.position = 'absolute';
+				course_mor.style.visibility = 'visible';
+				course_mor.style.position = 'static';
+			}
+		}

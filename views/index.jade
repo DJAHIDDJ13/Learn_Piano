@@ -1,33 +1,23 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
-  p Welcome to #{title}
-  p Welcome to #{title}
-  p Welcome to #{title}
-  p Welcome to #{title}
-  p Welcome to #{title}
-  p Welcome to #{title}
-  p Welcome to #{title}
-  p Welcome to #{title}
-  p Welcome to #{title}
-  p Welcome to #{title}
-  p Welcome to #{title}
-  p Welcome to #{title}
-  p Welcome to #{title}
-  p Welcome to #{title}
-  p Welcome to #{title}
-  p Welcome to #{title}
-  p Welcome to #{title}
-  p Welcome to #{title}
-  p Welcome to #{title}
-  p Welcome to #{title}
-  p Welcome to #{title}
-  p Welcome to #{title}
-  p Welcome to #{title}
-  p Welcome to #{title}
-  p Welcome to #{title}
-  p Welcome to #{title}
-  p Welcome to #{title}
-  p Welcome to #{title}
+	div.top-section
+		- if(logged) {
+			h1 Welcome
+			p.
+				View the course list
+			a(href='/course' style='background: #ffc844; padding: 10px; border-radius: 5px; text-decoration:none;').view-list.
+				View List
+		- } else {
+			h1 Welcome
+			p.
+				Create an account or login
+			div.register
+				form(action="/signup")
+					button#register-button SIGN UP
+				OR
+				form(action="/login")
+					button#login-button SIGN IN
+		- }
+	div.courses-section
+		

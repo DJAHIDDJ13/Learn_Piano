@@ -1,0 +1,21 @@
+extends layout
+
+block content
+	div.main-content
+		h2=Lecture.name
+		div.lecture-content
+			- for(var i of Lecture.content) {
+				- if(i.type == 'text') {
+					p=i.val
+				- } else {
+					img(src='/assets/'+i.val)
+				- }
+			- }
+		a(href="/course/lecture/"+(parseInt(CourseInfo.id)+1)+'/0')="Next"
+	- if(parseInt(CourseInfo.id)-1 > 0)
+		a(href="/course/lecture/"+(CourseInfo.id-1)+'/0')="Back"
+			
+block scripts_styles
+	script(src="/scripts/audiosynth.js")
+	script(src="/scripts/midi_play.js")
+	script(src="/scripts/midi_read.js")

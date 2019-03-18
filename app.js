@@ -4,9 +4,13 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var expressValidator = require('express-validator');
+var session = require('express-session');
+var mongoose = require('mongoose');
+var MongoStore = require('connect-mongo')(session);
 
 var indexRouter = require('./routes/index');
-var loginRouter = require('./routes/login');
+var userRouter = require('./routes/user');
+var courseRouter = require('./routes/course');
 
 var app = express();
 
@@ -21,8 +25,27 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(expressValidator());
 
+// mongoose middleware
+mongoose.connect('mongodb://127.0.0.1/piano_db', {useNewUrlParser: true});
+mongoose.set('useCreateIndex', true);
+mongoose.set('useFindAndModify', false);
+mongoose.Promise = global.Promise;
+mongoose.set();
+var db = mongoose.connection;
+
+app.use(session({
+	secret: 'work hard',
+	resave: true,
+	saveUninitialized: false,
+	store: new MongoStore({
+		mongooseConnection: db
+	})
+}));
+
+// routes 
 app.use('/', indexRouter);
-app.use('/login', loginRouter);
+app.use('/user', userRouter);
+app.use('/course', courseRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -40,4 +63,12 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+// db error handler
+db.on('error', console.error.bind(console, 'Mongodb connection error!'));
+db.once('open', function() {
+	console.log('Connected to database');
+});
+
 module.exports = app;
+module.exports.db = db;
+

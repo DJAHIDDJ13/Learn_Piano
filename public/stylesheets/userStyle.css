@@ -1,0 +1,89 @@
+html, body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #EEE; }
+
+body {
+  overflow: auto; }
+
+.sign-div {
+  background-color: #FFF;
+  width: 400px;
+  border-radius: 5px;
+  padding: 20px 30px;
+  margin: 50px auto;
+  text-align: center; }
+  .sign-div .input-div {
+    display: flex;
+    flex-direction: column;
+    width: 400px; }
+    .sign-div .input-div div {
+      position: relative; }
+    .sign-div .input-div .info-button {
+      position: relative; }
+      .sign-div .input-div .info-button span {
+        font-size: 15px;
+        background: #5bc0de;
+        border-radius: 40px;
+        width: 18px;
+        height: 18px;
+        color: white;
+        left: 370px;
+        top: 24px; }
+    .sign-div .input-div .info-button .pass-tooltip {
+      visibility: hidden;
+      background-color: black;
+      color: white;
+      border-radius: 6px;
+      padding: 10px 10px;
+      top: 5px;
+      left: 370px;
+      width: 210px;
+      position: absolute;
+      font-size: 10px;
+      text-align: left;
+      z-index: 1; }
+    .sign-div .input-div .pass-tooltip:after {
+      position: absolute;
+      background: black;
+      width: 15px;
+      height: 15px;
+      content: '';
+      top: 28%;
+      left: -3%;
+      transform: rotate(45deg); }
+    .sign-div .input-div .info-button:hover .pass-tooltip {
+      visibility: visible; }
+    .sign-div .input-div input[type="text"], .sign-div .input-div input[type="password"] {
+      width: 80%;
+      background: transparent;
+      padding: 10px 0;
+      border: 0;
+      border-bottom: 1px solid rgba(20, 20, 20, 0.4);
+      margin: 10px 10%;
+      border-radius: 3px;
+      outline: none; }
+    .sign-div .input-div span {
+      font-size: 10px;
+      color: red;
+      position: absolute;
+      top: 14px;
+      right: 45px; }
+  .sign-div input[type="submit"] {
+    background: #333;
+    color: #EEE;
+    cursor: pointer;
+    border-radius: 3px;
+    height: 40px;
+    width: 80%;
+    border: 0;
+    margin: 10%; }
+  .sign-div a {
+    text-decoration: none; }
+    .sign-div a:hover {
+      text-decoration: underline; }

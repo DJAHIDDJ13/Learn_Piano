@@ -1,21 +1,42 @@
 extends layout
 
 block content
-  .main.container
-    .row
-      .col-md-6.col-md-offset-3
-        h1.display-4.m-b-2 Log In
-        form(method='POST' action='/login/conn')
-          div.form-group
-            label(for='email') Email
-            input.form-control(type='text' id='email' placeholder='email' name='email')
-          div.form-group
-            label(for='password') Password
-            input.form-control(type='password' id='password' placeholder='password' name='password')
-          button.btn.btn-primary(type='submit') Log in 
-          - if(errors) {
-            ul
-            - for(error of errors) {
-              li=error.msg
-            - }
-          - }
+	- let errs = {}; // used for handling errors
+	- for(let err of errors) {
+	-	errs[err.param] = true;
+	- }
+
+	div.sign-div
+		h1 Sign In
+		form(method='POST' action='/user/login')
+		
+			div.input-div
+				div.form-email
+					- if(errs['email']) {
+						span='Please enter your email'
+						input.form-control(type='text' id='email' placeholder='Email' name='email' style='border-color:red; background-color:#ffeeee;')
+					- } else if(errs['auth']) {
+						span='Wrong email or password'
+						input.form-control(type='text' id='email' placeholder='Email' name='email' style='border-color:red; background-color:#ffeeee;')
+					- } else {
+						input.form-control(type='text' id='email' placeholder='Email' name='email')
+					- }
+				div.form-pass
+					- if(errs['password']) {
+						span='Invalid password'
+						input.form-control(type='password' id='password' placeholder='Password' name='password'  style='border-color:red; background-color:#ffeeee;')
+					- } else if(errs['auth']) {
+						input.form-control(type='password' id='password' placeholder='Password' name='password'  style='border-color:red; background-color:#ffeeee;')
+					- } else {
+						input.form-control(type='password' id='password' placeholder='Password' name='password')
+					- }
+			input(type='submit', value='Login') 
+		a(href='/user/forgot')='Forgot your password?'
+		br
+		a(href='/user/signup')='Don\'t have an account?'
+		br
+		- if(errs['unverified']) {
+			a(style='color:red;' href='/user/confirmation')='Verify account to access! verify here'
+		- }
+block scripts_styles
+	link(rel='stylesheet', href='/stylesheets/userStyle.css')

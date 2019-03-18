@@ -1,0 +1,96 @@
+@import 'reset';
+
+.sign-div {
+	background-color: #FFF;
+	width: 400px;
+	border-radius: 5px;
+	padding: 20px 30px;
+	margin: 50px auto;
+	text-align: center;
+	
+	.input-div {
+		display: flex;
+		flex-direction: column;
+		width: 400px;
+		div {
+			position: relative;
+		}
+		.info-button {
+			position: relative;
+			span {
+				font-size: 15px;
+				background: #5bc0de;
+				border-radius: 40px;
+				width: 18px;
+				height: 18px;
+				color: white;
+				left: 370px;
+				top: 24px;
+			}
+		}
+		.info-button .pass-tooltip {
+			visibility: hidden;
+			background-color: black;
+			color: white;
+			border-radius: 6px;
+			padding: 10px 10px;
+			top: 5px;
+			left: 370px;
+			width: 210px;
+			position: absolute;
+			font-size: 10px;
+			text-align: left;
+			
+			z-index: 1;
+		}
+		.pass-tooltip:after {
+			position: absolute;
+			background: black;
+			width: 15px;
+			height: 15px;
+			content: '';
+			top: 28%;
+			left: -3%;
+			transform: rotate(45deg);
+		}
+
+		
+		.info-button:hover .pass-tooltip{
+			visibility: visible;
+		}
+		
+		input[type="text"], input[type="password"] {
+			width: 80%;
+			background: transparent;
+			padding: 10px 0;
+			border: 0;
+			border-bottom: 1px solid rgba(20, 20, 20, 0.4);
+			margin: 10px 10%;
+			border-radius: 3px;
+			outline: none;
+		}
+		span {
+			font-size: 10px;
+			color: red;
+			position: absolute;
+			top: 14px;
+			right: 45px;
+		}
+	}
+	input[type="submit"] {
+		background: #333;
+		color: #EEE;
+		cursor: pointer;
+		border-radius: 3px;
+		height: 40px;
+		width: 80%;
+		border: 0;
+		margin: 10%;
+	}
+	a {
+		text-decoration: none;
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+}
