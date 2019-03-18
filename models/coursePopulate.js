@@ -1,4 +1,10 @@
-
+/**
+ * Script to fill the Course collection in mongoDB
+ * to run use 
+ * `mongo mongodb://127.0.0.1/piano_db models/coursePopulate.js`
+ * Note: change the models/coursePopulate.js with the actual link to 
+ * this file
+ */
 var courseDocs = 
 [
 	{

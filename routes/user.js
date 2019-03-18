@@ -1,3 +1,8 @@
+/**
+ * Handles routes for the /user page
+ * that includes all the login, signup and verification POSTs
+ * 
+ */
 var express = require('express');
 var nodemailer = require('nodemailer');
 var crypto = require('crypto');
@@ -97,7 +102,7 @@ router.post('/signup', function(req, res, next) {
 			password: req.body.password,
 			isVerified: true
 		};
-		
+
 		User.create(userData, function(err, user) {
 			if(err) {
 				// user already exists
@@ -108,40 +113,41 @@ router.post('/signup', function(req, res, next) {
 					errors: [{param: 'duplicate'}]
 				});
 			} else {
-				// create new token
-				let tok = new Token({
-					_userId: user._id,
-					token: crypto.randomBytes(16).toString('hex')
-				});
+				//~ // create new token
+				//~ let tok = new Token({
+					//~ _userId: user._id,
+					//~ token: crypto.randomBytes(16).toString('hex')
+				//~ });
 				
-				// save the token to the db
-				tok.save(function(err) {
-					if(err) { return res.status(500).send({msg: err.message}) }
-					// connect to the mail server
-					const transporter = nodemailer.createTransport({
-						host: 'smtp.ethereal.email',
-						port: 587,
-						secure: false,
-						auth: {
-							user: 'francesca11@ethereal.email',
-							pass: '5jf9CesSJNsSWB3Gd6'
-						}
-					});
-					var mailOptions = {
-						from: 'lionel.gutkowski69@ethereal.email',
-						to: user.email,
-						subject: '[Learn piano] Verify your account',
-						text: 'Hello, \n\n' + 
-							 'Please verify your account by clicking this link: \nhttp:\/\/'+
-							req.headers.host + '\/user\/confirmation\/' + tok.token + '.\n'
-					};
+				//~ // save the token to the db
+				//~ tok.save(function(err) {
+					//~ if(err) { return res.status(500).send({msg: err.message}) }
+					//~ // connect to the mail server
+					//~ const transporter = nodemailer.createTransport({
+						//~ host: 'smtp.ethereal.email',
+						//~ port: 587,
+						//~ secure: false,
+						//~ auth: {
+							//~ user: 'gaetano51@ethereal.email',
+							//~ pass: 'E18PJc41MA4EanzDAt'
+						//~ }
+					//~ });
+					//~ var mailOptions = {
+						//~ from: 'gaetano51@ethereal.email',
+						//~ to: user.email,
+						//~ subject: '[Learn piano] Verify your account',
+						//~ text: 'Hello, \n\n' + 
+							 //~ 'Please verify your account by clicking this link: \nhttp:\/\/'+
+							//~ req.headers.host + '\/user\/confirmation\/' + tok.token + '.\n'
+					//~ };
 
-					// send the mail					
-					transporter.sendMail(mailOptions, function(err) {
-						if(err) { return res.status(500).send({msg: err.message}); }
-						res.redirect('/user/confirmation');
-					});
-				});
+					//~ // send the mail
+					//~ transporter.sendMail(mailOptions, function(err) {
+						//~ if(err) { return res.status(500).send({msg: err.message}); }
+						//~ res.redirect('/user/confirmation');
+					//~ });
+				//~ });
+				res.redirect('/user/login');
 			}
 		});
 	}

@@ -1,16 +1,20 @@
+/**
+ * Shows and manages the exercice and and the solfege graph
+ * it also keeps a log of the key presses and the exercice received
+ */
+
 class solfege {
-	constructor(songInfo) {
-		this.songInfo = songInfo;
-		this.progress = 0;
-		this.notenum = 0;
-		this.playing = false;
-		this.playInterval = 0;
-		this.tries = 0;
-		this.score = 0;
-		this.tempo = 0;
-		this.color = color(0);
-		
-		this.symbolTable = {
+	constructor() {
+		this.progress = 0; // the progress
+		this.notenum = 0; // the current notenum
+		this.playing = false; // boolean for the playing state
+		this.playInterval = 0; // the interval of (setInterval) is store to be stopped by stop()
+		this.tries = 0; // number of tries so far, for logging
+		this.score = 0; // the current score
+		this.tempo = 0; // the song tempo
+		this.color = color(0); // the hint color
+		 
+		this.symbolTable = { // table of utf-8 chraracters of musical symbols
 			Gclef: '\u{1D11E}',
 			Fclef: '\u{1D122}',
 			whole: '\u{1D15D}',
@@ -23,44 +27,48 @@ class solfege {
 			sharp: '\u{266F}'
 		};
 		
-		this.durations = {
+		this.durations = { // relative (to each other) durations of each note type
 			'\u{1D15D}': 4,
 			'\u{1D15E}': 2,
 			'\u{1D15F}': 1,
 			'\u{1D160}': 0.5
 		};
 
-		this.notes = [];
-		this.songLen = 0;
-		this.script = "Press any key to start the exercice";
-		this.hints = [];
-		this.seen = 0;
-
-		this.blackLUT = [];
-		var cumul = 0;
-		for(var i=0; i<120; i++) {
+		this.notes = []; // the notes to be played (to be filled by the server ajax req)
+		this.songLen = 0; // the song len 
+		this.script = "Press any key to start the exercice"; // script text
+		this.hints = []; // to store the currently pressed keys for the hints
+		this.seen = 0; // the current last seen note (to avoid a problem with scores) 
+		// where the user can click multiple times on the same note and get a score for each click
+		this.blackLUT = []; // Look up table, blackLUT[n] returns the number
+		// of black notes from the beginning to n
+		var cumul = 0; // temp variable to fill blackLUT
+		for(var i=0; i<120; i++) { // filling the blackLUT
 			if((i)%12==1 || (i)%12==3 || (i)%12==6 || (i)%12==8 || (i)%12==10) {
 				cumul++;
 			}
 			this.blackLUT[i] = cumul;
 		}
-		this.keyLog = {
+		this.keyLog = { // the key log to be sent to the server after the exercice
 			player: [],
 			coursenum: 0,
+			level: 0,
 			lecturenum: 0,
 			content: {
 				notes: this.notes
-			} 
+			}
 		};
 	}
 
+	/* load the exercice to the this.note s and other info */
 	loadExercice(exer) {
 		this.keyLog.content.notes = exer.notes;
+		this.keyLog.level = exer.level;
 		this.notes = exer.notes;
 		this.tempo = exer.tempo;
 		this.songLen = exer.len;
 	}
-
+	/* calculate and update the score and the script and log */
 	updateScore(key, start, duration) {
 		var nextNote = (start/30 << 0) + 1;
 		var actualNote;
@@ -68,7 +76,7 @@ class solfege {
 		if(actualNote == undefined || this.seen == nextNote) {
 			this.color = color(255,0,0);
 			this.script = "Missed!";
-			this.score = Math.max(0, this.score - 0.05);
+			//~ this.score = Math.max(0, this.score - 0.05);
 			return;
 		}
 		this.seen = nextNote;
@@ -92,12 +100,12 @@ class solfege {
 		if(!noteDifference) {
 			localScore += (durationDifference)? 1/(1+durationDifference): 1;
 			localScore += (startDifference)? 1/(startDifference+1): 1;
-			this.score += localScore;
-			if(localScore > 1.5) {
+			this.score ++;
+			if(localScore > 1) {
 				this.script = "Amazing!";
-			} else if(localScore > 0.8) {
+			} else if(localScore > 0.7) {
 				this.script = "Excellent";
-			} else if(localScore > 0.5) {
+			} else if(localScore > 0.4) {
 				this.script = "Good";
 			} else {
 				this.script = "Decent";
@@ -106,7 +114,7 @@ class solfege {
 		} else {
 			this.color = color(255,0,0);
 			this.script = "Missed!";
-			this.score = Math.max(0, this.score - 0.05);
+			//~ this.score = Math.max(0, this.score - 0.05);
 		}
 		sol.logKeys({
 			time: Math.abs(sol.progress),
@@ -115,7 +123,7 @@ class solfege {
 			startDifference: startDifference
 		});
 	}
-
+	/* each time a piano event happens it is sent here to log and fill the this.hints */
 	update(key, isRelease) {
 		if(!isRelease) {
 			this.hints[key] = {
@@ -132,12 +140,14 @@ class solfege {
 		}
 	}
 	
+	/* adds one object to this.keyLog.player used to log the user key clicks */
 	logKeys(logEntry) {
 		if(this.playing) {
 			this.keyLog.player.push(logEntry);
 		}
 	}
 	
+	/* start playing the song using setInterval */
 	play(tempo) {
 		this.tempo = tempo;
 		this.playing = true;
@@ -155,10 +165,11 @@ class solfege {
 		}, (60000/30)/tempo);
 	}
 	
+	// stops the song and sends the exercice results to the server
+	// and resets values
 	stop() {
+		this.keyLog.score = this.score;
 		clearInterval(this.playInterval);
-		this.playInterval = 0;
-		this.script = "Your score was " + Math.round(this.score*100)/100 + '/' + this.songLen;
 		$.ajax({ // post results
 			type: 'POST',
 			url: '/course/exercice',
@@ -167,16 +178,19 @@ class solfege {
 			dataType: 'json',
 			success: function(data) {
 				console.log("results sent to server successfully");
-				sol.script = "Saved results!";
 			},
 			error: function(err) {
+				alert("an error has occured while sending your results");
 				console.log(err);
 			}
 		});
+		this.playInterval = 0;
+		this.script = "You got " + Math.round(this.score*100)/100 + '!';
 		this.keyLog.player = []; // resetting log
 		this.playing = false;
 	}
 	
+	/* the main function to show the solfege and hints*/
 	show() {
 		this.notenum = Math.abs(Math.floor(this.progress / 30));
 
@@ -226,7 +240,7 @@ class solfege {
 		var noteSpacing = 30;
 		var outLedgerWidth = 18;
 		var notesPadding = 70;
-		for(var i=this.progress; i<this.songLen; i++) {
+		for(var i=this.progress; i<this.songLen; i++) { // parsing the notes and drawing them
 			if(!this.notes[i]) {
 				continue;
 			}
@@ -251,9 +265,9 @@ class solfege {
 				push();
 				translate(note.pos*noteSpacing + paddingX+notesPadding, 
 						  paddingY+(spacing/2)*noteOff);
-				var wtext = ((isSharp)? this.symbolTable.sharp: '');
+				var wtext = ((isSharp)? this.symbolTable.sharp: ''); // for the sharp symbol
 
-				if((noteOff > 3 && noteOff < 10) || (noteOff > 16)) {
+				if((noteOff > 3 && noteOff < 10) || (noteOff > 16)) { // a normal note
 					text(note.sym, 0, spacing);
 					if(wtext) {
 						push();
@@ -261,7 +275,7 @@ class solfege {
 						text(wtext, -6, spacing);
 						pop();
 					}
-				} else {
+				} else { // a rotated note
 					rotate(PI);
 					text(note.sym, -20, -1);
 					if(wtext) {
@@ -271,6 +285,7 @@ class solfege {
 						pop();
 					}
 				}
+				/* to draw the out ledgers*/
 				//~ if((noteOff > 7 || noteOff < -1) && Math.abs(noteOff)%2 == 1) {
 					//~ strokeWeight(2);
 					//~ line(0, spacing/2, outLedgerWidth, spacing/2);
@@ -282,8 +297,6 @@ class solfege {
 		for(var i=0; i<120; i++) {
 			stroke(this.color);
 			fill(this.color);
-			//~ translate(paddingX+notesPadding, 
-					  //~ paddingY+(spacing/2)*(44-));
 			if(this.hints[i]) {
 				var noteOff = 46 - this.hints[i].val;
 				noteOff += this.blackLUT[this.hints[i].val];

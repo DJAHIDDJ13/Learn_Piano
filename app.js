@@ -1,3 +1,8 @@
+/**
+ * The main entrance of the project, contains middleware for the 
+ * dependencies used and initialises the connection with mongoose
+ * and also links the public directory and the 404 error
+ */
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');

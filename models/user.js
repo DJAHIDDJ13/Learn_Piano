@@ -1,3 +1,7 @@
+/**
+ * Ceates the User and Token schema
+ * the token is used for email verification
+ */
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
 

@@ -1,18 +1,19 @@
-
+/**
+ * handles the piano animation and events 
+ */
 class piano {
-	constructor(notes) {
-		this.notes = notes;
-		this.shift = 0;
-		this.active = [];
-		for(var i=0; i<120; i++) {
+	constructor() {
+		this.shift = 0; // the shift from the the start (after dragging from the start position)
+		this.active = []; // an array of the currently active keys
+		for(var i=0; i<120; i++) {// init
 			this.active[i] = false;
 		}
-		this.whiteKeyWidth = 60;
-		this.whiteKeyLen = 249;
-		this.blackKeyWidth = this.whiteKeyWidth*0.6;
-		this.blackKeyLen = this.whiteKeyLen*0.6;
+		this.whiteKeyWidth = 60; // the width of the white keys (when drawing)
+		this.whiteKeyLen = 249; // the length of the white keys
+		this.blackKeyWidth = this.whiteKeyWidth*0.6; // the width of the black keys
+		this.blackKeyLen = this.whiteKeyLen*0.6; // the length of the black keys
 		
-		this.blackLUT = [];
+		this.blackLUT = []; // black look up table 
 		var cumul = 0;
 		for(var i=0; i<120; i++) {
 			if((i-1)%7==3 || (i-1)%7==6) {
@@ -21,11 +22,16 @@ class piano {
 			this.blackLUT[i] = cumul;
 		}
 		
-		this.startOffset = 17;
+		this.startOffset = 17; // the offset of our virtual piano from the start 
+		// meaning the first key from the left has a midi code 17
 	}
+	/* update the shift, called from mouseDragged */
 	updateShift(delta) {
 		this.shift = constrain(this.shift+delta, -56*this.whiteKeyWidth+1199, 0);
 	}
+	
+	/* update the keys on is an array of the new active keys whereas off is and array
+	 * of the new disactivated keys */
 	updateKeys(on, off) {
 		for(var i of on) {
 			this.active[i] = 1;
@@ -35,6 +41,7 @@ class piano {
 		}
 	}
 
+	/* main function to show the piano */
 	show() {
 		translate(this.shift, 0);
 		/* white keys */

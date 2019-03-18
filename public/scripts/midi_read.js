@@ -1,3 +1,8 @@
+/**
+ * reads and handles the midi device and midi messages 
+ * and also handles keyboard events and creates a piano event based on it
+ */
+
 let notes = [];
 var piano_event;
 
@@ -6,6 +11,8 @@ window.addEventListener('piano', // handling piano events (midi or mouse or keyb
 		handlePianoEvent(e.detail.data);
 	}, false
 );
+
+/* play the sound for the piano event */
 function handlePianoEvent(m) {
     const [command, key, velocity] = m;
 
@@ -20,19 +27,22 @@ function handlePianoEvent(m) {
 		}
 	}
 }
+
+/* dispatches a piano event with some log info when called by the midi device message */
 function midiMessageHandler(m) {
 	window.dispatchEvent(new CustomEvent('piano', {detail:{data: m.data, source: "midi"}}));
 }
 
+/* connects the midi device and sets up the Synth object(audiosynth.js) */
 function setupMIDI() {
 	navigator.requestMIDIAccess().then(
 		function (m) {
 			console.log("Initializing MIDI");
-			m.inputs.forEach(function (entry) {
+			m.inputs.forEach(function (entry) { // for all the midi device set the message handler as midiMessageHandler
 				console.log(entry.name + " detected");
 				entry.onmidimessage = midiMessageHandler;
 			});
-			Synth.setSampleRate(44100);
+			Synth.setSampleRate(44100); // set the quality of the synthesized audio
 		},
 		function (err) {
 			console.log('An error occured while trying to init midi: ' + err);
@@ -40,10 +50,10 @@ function setupMIDI() {
 	);
 }
 
-// keyboard midi simulator
+// keyboard midi simulator (needs bug fix when changing the octave while pressing)
 window.onload = function () {
 	setupMIDI();
-	let notes_map = {
+	let notes_map = { // a look up table for the positions and codes of each keyboard key and piano midi code
 		81: 0,
 		90: 1,
 		83: 2,
@@ -62,12 +72,12 @@ window.onload = function () {
 		80: 15,
 		77: 16
 	};
-	let octave_num = 4;
-	let octave_max = 7;
-	let velocity = 50;
-	let pressed = [];
+	let octave_num = 4; // default octave number
+	let octave_max = 7; // the maximum possible octave (the min is 0)
+	let velocity = 50; // the default velocity
+	let pressed = []; // to store the currently pressed
 	
-	document.addEventListener("keydown", function(e) {
+	document.addEventListener("keydown", function(e) {// the press event listener 
 		if(pressed[e.keyCode]) return;
 		
 		if(e.keyCode == 87) { // octave down
@@ -87,7 +97,7 @@ window.onload = function () {
 		pressed[e.keyCode] = true;
 	});
 	
-	document.addEventListener("keyup", function (e) {
+	document.addEventListener("keyup", function (e) {//the release event listener
 		if(notes_map[e.keyCode] != undefined) {
 			var d = [144, notes_map[e.keyCode] + 12 * (octave_num + 1), 0];
 			window.dispatchEvent(new CustomEvent('piano', {detail:{data: d, source: "keyboard"}}));
