@@ -100,7 +100,7 @@ router.post('/signup', function(req, res, next) {
 			email: req.body.email,
 			username: req.body.username,
 			password: req.body.password,
-			isVerified: true
+			isVerified: true // changer a false pour tester avec la verification email
 		};
 
 		User.create(userData, function(err, user) {
@@ -113,6 +113,9 @@ router.post('/signup', function(req, res, next) {
 					errors: [{param: 'duplicate'}]
 				});
 			} else {
+				// decommenter pour tester la verification mail
+				// j'ai commenté ca parceque le serveur de ethereal.email
+				// (le serveur SMTP de test ne marchera pas)
 				//~ // create new token
 				//~ let tok = new Token({
 					//~ _userId: user._id,
@@ -126,10 +129,10 @@ router.post('/signup', function(req, res, next) {
 					//~ const transporter = nodemailer.createTransport({
 						//~ host: 'smtp.ethereal.email',
 						//~ port: 587,
-						//~ secure: false,
+						//~ ssl: false,
 						//~ auth: {
-							//~ user: 'gaetano51@ethereal.email',
-							//~ pass: 'E18PJc41MA4EanzDAt'
+							//~ user: 'leora25@ethereal.email',
+							//~ pass: 'eJMqpHTJ8845v71UDu'
 						//~ }
 					//~ });
 					//~ var mailOptions = {
@@ -147,6 +150,8 @@ router.post('/signup', function(req, res, next) {
 						//~ res.redirect('/user/confirmation');
 					//~ });
 				//~ });
+				
+				// ***** et commenter ce ligne si vous voulez test la verif email *****
 				res.redirect('/user/login');
 			}
 		});
@@ -249,6 +254,15 @@ router.post('/resend', function(req, res, next) {
 					res.redirect('/user/confirmation');
 				});
 			});
+		});
+	}
+});
+
+router.post('/logout', function(req, res, next) {
+	if(req.session) {
+		req.session.destroy(function(err) {
+			if(err) { return next(err); }
+			return res.redirect('/');
 		});
 	}
 });
